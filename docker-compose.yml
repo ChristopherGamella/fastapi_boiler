@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:  api:
+    build: .
+    container_name: fastapi_app
+    command: >
+      bash -c "uvicorn main:app --host 0.0.0.0 --port 48001 --reload"
+    volumes:
+      - .:/app
+    ports:
+      - "48001:48001"
+    env_file:
+      - .env.docker
+    depends_on:
+      - db
+    restart: always
+  db:
+    image: postgres:15
+    container_name: fastapi_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.docker
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data:
