@@ -1,5 +1,6 @@
-from datetime import timedelta
-from typing import Optional
+import secrets
+from datetime import datetime, timedelta
+from typing import Optional, Tuple
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -7,11 +8,11 @@ from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.security import ALGORITHM, verify_password
+from app.core.security import ALGORITHM, get_password_hash, verify_password
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.auth import TokenData
-from app.services.user import get_user_by_username
+from app.services.user import get_user_by_email, get_user_by_username
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_PREFIX}/auth/token")
 
